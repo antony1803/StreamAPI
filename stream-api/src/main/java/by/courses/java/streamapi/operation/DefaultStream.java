@@ -10,11 +10,10 @@ import java.util.stream.Collectors;
 
 public class DefaultStream implements Operation<UserBase> {
 
-    @Override
     public Collection<UserBase> removeWithMaxAge(Collection<UserBase> entities) {
 
         UserBase oneOfOldest = entities.stream().max(Comparator.comparing(UserBase::getAge)).get();
-        return entities.stream().filter(temp->temp.getAge()).collect(Collectors.toList());
+        return entities.stream().filter(temp->temp.getAge() < oneOfOldest.getAge()).collect(Collectors.toList());
 
     }
 
@@ -40,7 +39,7 @@ public class DefaultStream implements Operation<UserBase> {
         return entities.stream().skip(1).limit(2).collect(Collectors.toList());
     }
 
-    @Override
+
     public Collection<UserBase> getAllElementsByTemplate(Collection<UserBase> entities, UserBase userBase) {
         return entities.stream().filter(temp -> temp.equals(userBase)).collect(Collectors.toList());
     }
@@ -54,7 +53,7 @@ public class DefaultStream implements Operation<UserBase> {
 
     @Override
     public Collection<UserBase> addValueToAllNames(Collection<UserBase> entities, String value) {
-        return entities.stream().map((s) -> UserBase.of(s.getName()+"_1", s.getAge())).collect(Collectors.toList());
+        return entities.stream().map((s) -> UserBase.of(s.getName() + value, s.getAge())).collect(Collectors.toList());
     }
 
     @Override
